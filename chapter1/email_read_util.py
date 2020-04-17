@@ -7,6 +7,8 @@ stopwords = set(nltk.corpus.stopwords.words('english'))
 stemmer = nltk.PorterStemmer()
 
 # Combine the different parts of the email into a flat list of strings
+
+
 def flatten_to_string(parts):
     ret = []
     if type(parts) == str:
@@ -17,6 +19,7 @@ def flatten_to_string(parts):
     elif parts.get_content_type == 'text/plain':
         ret += parts.get_payload()
     return ret
+
 
 # Extract subject and body text from a single email file
 def extract_email_text(path):
@@ -32,11 +35,13 @@ def extract_email_text(path):
         subject = ""
 
     # Read the email body
-    body = ' '.join(m for m in flatten_to_string(msg.get_payload()) if type(m) == str)
+    body = ' '.join(m for m in flatten_to_string(
+        msg.get_payload()) if type(m) == str)
     if not body:
         body = ""
 
     return subject + ' ' + body
+
 
 # Process a single email file into stemmed tokens
 def load(path):
@@ -48,7 +53,8 @@ def load(path):
     tokens = nltk.word_tokenize(email_text)
 
     # Remove punctuation from tokens
-    tokens = [i.strip("".join(punctuations)) for i in tokens if i not in punctuations]
+    tokens = [i.strip("".join(punctuations))
+              for i in tokens if i not in punctuations]
 
     # Remove stopwords and stem tokens
     if len(tokens) > 2:
